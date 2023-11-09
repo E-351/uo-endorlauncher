@@ -1,0 +1,135 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EndorLauncher"
+        xmlns:ui="clr-namespace:EndorLauncher.UI"
+        xmlns:conveters="clr-namespace:EndorLauncher.UI.Converters"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
+        x:Class="EndorLauncher.UI.MainWindow"
+        Title="Endor Launcher"
+        Width="400" Height="400"
+        MinWidth="300" MinHeight="200" Padding="5" WindowStartupLocation="CenterOwner"
+        Icon="/Assets/icon.ico"
+        Name="self"
+        Classes.ModeIsNormal="{Binding Mode, ElementName=self, Converter={StaticResource EqualsConverter}, ConverterParameter={x:Static ui:MainWindowMode.Normal}}"
+        Classes.ModeIsEditable="{Binding Mode, ElementName=self, Converter={StaticResource EqualsConverter}, ConverterParameter={x:Static ui:MainWindowMode.Editable}}">
+    <Window.Styles>
+        <Style Selector=":is(Visual).ShowWhenModeIsNormal">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="Window.ModeIsNormal :is(Visual).ShowWhenModeIsNormal">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector=":is(Visual).ShowWhenModeIsEditable">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="Window.ModeIsEditable :is(Visual).ShowWhenModeIsEditable">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="Window.ModeIsNormal :is(InputElement).DisabledWhenModeIsNormal">
+            <Setter Property="IsEnabled" Value="False" />
+        </Style>
+        <Style Selector="ItemsControl ContentPresenter:nth-child(1) :is(InputElement).DisabledWhenFirst">
+            <Setter Property="IsEnabled" Value="False" />
+        </Style>
+        <Style Selector="ItemsControl ContentPresenter:nth-last-child(1) :is(InputElement).DisabledWhenLast">
+            <Setter Property="IsEnabled" Value="False" />
+        </Style>
+    </Window.Styles>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Source="/Assets/banner.png" Margin="10 10 10 25" MaxHeight="156" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0 0 0 5">
+            <StackPanel Spacing="5">
+                <Grid Classes="ShowWhenModeIsEditable">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding Model.Settings.ClientPath, ElementName=self}" Watermark="Client location" Margin="0 0 5 0" />
+                    <Button Grid.Column="1" Command="{Binding SelectClientDirectory, ElementName=self}">...</Button>
+                </Grid>
+                <ItemsControl ItemsSource="{Binding Model.Settings.Accounts, ElementName=self}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Spacing="5" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="local:AccountSettings">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0" Watermark="Username" Margin="0 0 5 0" 
+                                         Classes="DisabledWhenModeIsNormal" Text="{Binding Username}" />
+                                <Grid Grid.Column="1" Margin="0 0 5 0 ">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox PasswordChar="*" Watermark="Password" Margin="0 0 -1 0"
+                                             Text="{Binding Password}" Grid.Column="0"
+                                             Classes="DisabledWhenModeIsNormal">
+                                    </TextBox>
+                                </Grid>
+                                <StackPanel Orientation="Horizontal" Spacing="2.5" Grid.Column="2">
+                                    <Button Classes="ShowWhenModeIsEditable DisabledWhenFirst"
+                                            Command="{Binding ShiftUp, ElementName=self}"
+                                            CommandParameter="{Binding}">
+                                        <Image Source="{SvgImage /Assets/icons/arrow-up.svg}" Height="12" />
+                                    </Button>
+                                    <Button Classes="ShowWhenModeIsEditable DisabledWhenLast"
+                                            Command="{Binding ShiftDown, ElementName=self}"
+                                            CommandParameter="{Binding}">
+                                        <Image Source="{SvgImage /Assets/icons/arrow-down.svg}" Height="12" />
+                                    </Button>
+                                    <Button Classes="ShowWhenModeIsEditable"
+                                            Command="{Binding DeleteProfile, ElementName=self}"
+                                            CommandParameter="{Binding}">
+                                        <Image Source="{SvgImage /Assets/icons/trash.svg}" Height="12" />
+                                    </Button>
+                                    <Button Classes="ShowWhenModeIsNormal"
+                                            Command="{Binding LaunchClient, ElementName=self}"
+                                            CommandParameter="{Binding}">
+                                        <Image Source="{SvgImage /Assets/icons/play.svg}" Height="12" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Classes="ShowWhenModeIsEditable" Command="{Binding CreateProfile, ElementName=self}">Add profile</Button>
+            </StackPanel>
+        </ScrollViewer>
+        <Grid Grid.Row="2" Classes="ShowWhenModeIsEditable">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0" Command="{Binding ConfirmEditSettings, ElementName=self}" Margin="0 0 2.5 0">Save</Button>
+            <Button Grid.Column="1" Command="{Binding CancelEditSettings, ElementName=self}" Margin="2.5 0 0 0">Cancel</Button>
+        </Grid>
+        <Grid Grid.Row="2" Classes="ShowWhenModeIsNormal">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Button Command="{Binding EditSettings, ElementName=self}">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <Image Source="{SvgImage /Assets/icons/edit.svg}" Height="12" />
+                    <TextBlock>Edit settings</TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

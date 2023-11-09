@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FC226A06-5A04-435E-AB84-26B777E234E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndorLauncher", "src\EndorLauncher\EndorLauncher.csproj", "{BB2A63F5-E8CA-4D8D-AE51-91B6EF42BC2C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extras", "extras", "{F77517E6-B5DC-41EA-B16D-474511DBAA42}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		README.md = README.md
+		version.json = version.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{FA58DAE2-92B3-497C-B217-20AEA1DABFC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F7AE20A3-0D60-4A56-8B1B-49126CEE25A1}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB2A63F5-E8CA-4D8D-AE51-91B6EF42BC2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB2A63F5-E8CA-4D8D-AE51-91B6EF42BC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB2A63F5-E8CA-4D8D-AE51-91B6EF42BC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB2A63F5-E8CA-4D8D-AE51-91B6EF42BC2C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB2A63F5-E8CA-4D8D-AE51-91B6EF42BC2C} = {FC226A06-5A04-435E-AB84-26B777E234E7}
+		{F7AE20A3-0D60-4A56-8B1B-49126CEE25A1} = {FA58DAE2-92B3-497C-B217-20AEA1DABFC2}
+	EndGlobalSection
+EndGlobal

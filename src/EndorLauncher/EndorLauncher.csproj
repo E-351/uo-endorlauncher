@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+        <AssemblyName>endorlauncher</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- publish options -->
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>false</SelfContained>
+        <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+        <StripSymbols Condition="'$(Configuration)' == 'Release'">true</StripSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.0.5"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.5"/>
+        <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.3"/>
+        <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.5"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.5"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5"/>
+        <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="UI\MainWindow.axaml.cs">
+            <DependentUpon>MainWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Assets\icon.ico"/>
+        <AvaloniaResource Include="Assets\icon.ico"/>
+        <None Remove="Assets\banner.png"/>
+        <AvaloniaResource Include="Assets\banner.png"/>
+        <None Remove="Assets\icons\edit.svg"/>
+        <AvaloniaResource Include="Assets\icons\edit.svg"/>
+        <None Remove="Assets\icons\key.svg"/>
+        <AvaloniaResource Include="Assets\icons\key.svg"/>
+        <None Remove="Assets\icons\play.svg"/>
+        <AvaloniaResource Include="Assets\icons\play.svg"/>
+        <None Remove="Assets\icons\trash.svg"/>
+        <AvaloniaResource Include="Assets\icons\trash.svg"/>
+        <None Remove="Assets\icons\arrow-down.svg"/>
+        <AvaloniaResource Include="Assets\icons\arrow-down.svg"/>
+        <None Remove="Assets\icons\arrow-up.svg"/>
+        <AvaloniaResource Include="Assets\icons\arrow-up.svg"/>
+    </ItemGroup>
+</Project>
