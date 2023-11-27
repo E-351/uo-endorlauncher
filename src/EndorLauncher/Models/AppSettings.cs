@@ -7,6 +7,12 @@ using EndorLauncher.Internal;
 
 namespace EndorLauncher.Models;
 
+public enum ServerEnvironment
+{
+    Live,
+    PTR,
+}
+
 public class AppSettings : ObservableObject
 {
     public const string SettingsFileName = "endorlauncher.json";
@@ -36,12 +42,12 @@ public class AppSettings : ObservableObject
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
-    
+
     public static string GetFilePath()
     {
         return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Environment.ProcessPath)!, SettingsFileName);
     }
-    
+
     public static AppSettings Load()
     {
         var path = GetFilePath();

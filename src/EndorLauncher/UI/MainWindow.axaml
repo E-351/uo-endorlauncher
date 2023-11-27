@@ -69,7 +69,7 @@
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBox Grid.Column="0" Watermark="Username" Margin="0 0 5 0" 
+                                <TextBox Grid.Column="0" Watermark="Username" Margin="0 0 5 0"
                                          Classes="DisabledWhenModeIsNormal" Text="{Binding Username}" />
                                 <Grid Grid.Column="1" Margin="0 0 5 0 ">
                                     <Grid.ColumnDefinitions>
@@ -110,21 +110,13 @@
                 <Button Classes="ShowWhenModeIsEditable" Command="{Binding CreateProfile, ElementName=self}">Add profile</Button>
             </StackPanel>
         </ScrollViewer>
-        <Grid Grid.Row="2" Classes="ShowWhenModeIsEditable">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            
+        <Grid Grid.Row="2" Classes="ShowWhenModeIsEditable" ColumnDefinitions="*,*">
             <Button Grid.Column="0" Command="{Binding ConfirmEditSettings, ElementName=self}" Margin="0 0 2.5 0">Save</Button>
             <Button Grid.Column="1" Command="{Binding CancelEditSettings, ElementName=self}" Margin="2.5 0 0 0">Cancel</Button>
         </Grid>
-        <Grid Grid.Row="2" Classes="ShowWhenModeIsNormal">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Button Command="{Binding EditSettings, ElementName=self}">
+        <Grid Grid.Row="2" Classes="ShowWhenModeIsNormal" ColumnDefinitions="*,*">
+            <ComboBox Grid.Column="0" ItemsSource="{Binding ServerEnvironmentOptions, ElementName=self}" SelectedItem="{Binding ServerEnvironment, ElementName=self}" Margin="0 0 2.5 0" />
+            <Button Grid.Column="1" Command="{Binding EditSettings, ElementName=self}" Margin="2.5 0 0 0">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Image Source="{SvgImage /Assets/icons/edit.svg}" Height="12" />
                     <TextBlock>Edit settings</TextBlock>

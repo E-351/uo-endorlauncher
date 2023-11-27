@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -33,18 +34,20 @@ public class MainWindowViewModel : ObservableObject
 public partial class MainWindow : Window
 {
     private readonly string[] DirVariables = { "%LOCALAPPDATA%", "%APPDATA%", "%ProgramData%", "%ProgramFiles%", "%ProgramFiles(x86)%", "%USERPROFILE%" };
-    
+
     public MainWindow()
     {
         DataContext = new MainWindowViewModel()
         {
             Settings = AppSettings.Load(),
         };
-        
+
         InitializeComponent();
     }
 
     public MainWindowViewModel Model => (MainWindowViewModel)DataContext!;
+
+    public ServerEnvironment[] ServerEnvironmentOptions { get; } = Enum.GetValues<ServerEnvironment>().ToArray();
 
     // control
     public void EditSettings()
@@ -53,17 +56,17 @@ public partial class MainWindow : Window
         {
             return;
         }
-        
+
         Mode = MainWindowMode.Editable;
     }
-    
+
     public async void CancelEditSettings()
     {
         if (Mode != MainWindowMode.Editable)
         {
             return;
         }
-        
+
         try
         {
             Model.Settings = AppSettings.Load();
@@ -76,7 +79,7 @@ public partial class MainWindow : Window
                 .ShowAsync();
         }
     }
-    
+
     public async void ConfirmEditSettings()
     {
         if (Mode != MainWindowMode.Editable)
@@ -96,7 +99,7 @@ public partial class MainWindow : Window
                 .ShowAsync();
         }
     }
-    
+
     // normal mode
     public async void LaunchClient(AccountSettings accountSettings)
     {
@@ -109,10 +112,32 @@ public partial class MainWindow : Window
         {
             var clientPath = Environment.ExpandEnvironmentVariables(Model.Settings.ClientPath);
 
+            var args = new StringBuilder();
+
+            args.Append($@"-username ""{accountSettings.Username}"" ");
+            args.Append($@"-password_enc ""{accountSettings.EncryptedPassword}"" ");
+            args.Append("-skiploginscreen ");
+
+            switch (ServerEnvironment)
+            {
+                case ServerEnvironment.Live:
+                    args.Append("-ip server.endor-revived.com -port 5000 ");
+                    break;
+                case ServerEnvironment.PTR:
+                    args.Append("-ip server.esqgame.com -port 5000 ");
+                    break;
+            }
+
+            // trim
+            while (args[^1] == ' ')
+            {
+                args.Length -= 1;
+            }
+
             Process.Start(new ProcessStartInfo()
             {
                 FileName = clientPath,
-                Arguments = $@"-username ""{accountSettings.Username}"" -password_enc ""{accountSettings.EncryptedPassword}"" -skiploginscreen",
+                Arguments = args.ToString(),
                 WorkingDirectory = System.IO.Path.GetDirectoryName(clientPath),
             });
         }
@@ -189,7 +214,7 @@ public partial class MainWindow : Window
 
         Model.Settings.ClientPath = path;
     }
-    
+
     public void CreateProfile()
     {
         if (Mode != MainWindowMode.Editable)
@@ -219,10 +244,10 @@ public partial class MainWindow : Window
         {
             return;
         }
-        
+
         (Model.Settings.Accounts[index - 1], Model.Settings.Accounts[index]) = (Model.Settings.Accounts[index], Model.Settings.Accounts[index - 1]);
     }
-    
+
     public void ShiftDown(AccountSettings accountSettings)
     {
         if (Mode != MainWindowMode.Editable)
@@ -235,11 +260,11 @@ public partial class MainWindow : Window
         {
             return;
         }
-        
+
         (Model.Settings.Accounts[index + 1], Model.Settings.Accounts[index]) = (Model.Settings.Accounts[index], Model.Settings.Accounts[index + 1]);
     }
-    
-    public void DeleteProfile(AccountSettings accountSettings)  
+
+    public void DeleteProfile(AccountSettings accountSettings)
     {
         if (Mode != MainWindowMode.Editable)
         {
@@ -254,8 +279,21 @@ public partial class MainWindow : Window
         Model.Settings.Accounts.Remove(accountSettings);
     }
 
+    #region Property: ServerEnvironment
+
+    public static readonly DirectProperty<MainWindow, ServerEnvironment> ServerEnvironmentProperty = AvaloniaProperty.RegisterDirect<MainWindow, ServerEnvironment>(nameof(ServerEnvironment), o => o.ServerEnvironment);
+
+    private ServerEnvironment _serverEnvironment;
+    public ServerEnvironment ServerEnvironment
+    {
+        get => _serverEnvironment;
+        private set => SetAndRaise(ServerEnvironmentProperty, ref _serverEnvironment, value);
+    }
+
+    #endregion
+
     #region Property: Mode
-    
+
     public static readonly DirectProperty<MainWindow, MainWindowMode> ModeProperty = AvaloniaProperty.RegisterDirect<MainWindow, MainWindowMode>(nameof(Mode), o => o.Mode);
 
     private MainWindowMode _mode;
@@ -264,6 +302,6 @@ public partial class MainWindow : Window
         get => _mode;
         private set => SetAndRaise(ModeProperty, ref _mode, value);
     }
-    
+
     #endregion
 }
