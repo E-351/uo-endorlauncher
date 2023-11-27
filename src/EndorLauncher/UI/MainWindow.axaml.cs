@@ -124,7 +124,7 @@ public partial class MainWindow : Window
                     args.Append("-ip server.endor-revived.com -port 5000 ");
                     break;
                 case ServerEnvironment.PTR:
-                    args.Append("-ip server.esqgame.com -port 5000 ");
+                    args.Append("-ip server.esqgame.com -port 5001 ");
                     break;
             }
 
@@ -281,9 +281,9 @@ public partial class MainWindow : Window
 
     #region Property: ServerEnvironment
 
-    public static readonly DirectProperty<MainWindow, ServerEnvironment> ServerEnvironmentProperty = AvaloniaProperty.RegisterDirect<MainWindow, ServerEnvironment>(nameof(ServerEnvironment), o => o.ServerEnvironment);
+    public static readonly DirectProperty<MainWindow, ServerEnvironment> ServerEnvironmentProperty = AvaloniaProperty.RegisterDirect<MainWindow, ServerEnvironment>(nameof(ServerEnvironment), w => w.ServerEnvironment, setter: (w, v) => w.ServerEnvironment = v);
 
-    private ServerEnvironment _serverEnvironment;
+    private ServerEnvironment _serverEnvironment = ServerEnvironment.Live;
     public ServerEnvironment ServerEnvironment
     {
         get => _serverEnvironment;
@@ -294,7 +294,7 @@ public partial class MainWindow : Window
 
     #region Property: Mode
 
-    public static readonly DirectProperty<MainWindow, MainWindowMode> ModeProperty = AvaloniaProperty.RegisterDirect<MainWindow, MainWindowMode>(nameof(Mode), o => o.Mode);
+    public static readonly DirectProperty<MainWindow, MainWindowMode> ModeProperty = AvaloniaProperty.RegisterDirect<MainWindow, MainWindowMode>(nameof(Mode), w => w.Mode, setter: (w, v) => w.Mode = v);
 
     private MainWindowMode _mode;
     public MainWindowMode Mode
