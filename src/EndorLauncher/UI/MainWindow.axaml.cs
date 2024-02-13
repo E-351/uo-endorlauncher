@@ -124,7 +124,7 @@ public partial class MainWindow : Window
                     args.Append("-ip server.endor-revived.com -port 5000 ");
                     break;
                 case ServerEnvironment.PTR:
-                    args.Append("-ip server.esqgame.com -port 5000 ");
+                    args.Append("-ip server.esqgame.com -port 5010 ");
                     break;
             }
 
